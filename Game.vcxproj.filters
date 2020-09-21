@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="E:\CRYENGINETRAINEE\CRYENGINE Projects\FPSTemplateNEW\FPSTemplateNEW\Code\StdAfx.cpp" />
     <ClCompile Include="E:\CRYENGINETRAINEE\CRYENGINE Projects\FPSTemplateNEW\FPSTemplateNEW\solutions\win64\Code_uber.cpp">
       <Filter>UBER FILES</Filter>
     </ClCompile>
@@ -23,17 +22,13 @@
     <ClCompile Include="Spawnpoint.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePlugin.cpp" />
+    <ClCompile Include="StdAfx.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="E:\CRYENGINETRAINEE\CRYENGINE Projects\FPSTemplateNEW\FPSTemplateNEW\Code\GamePlugin.cpp" />
-    <ClInclude Include="E:\CRYENGINETRAINEE\CRYENGINE Projects\FPSTemplateNEW\FPSTemplateNEW\Code\GamePlugin.h" />
-    <ClInclude Include="E:\CRYENGINETRAINEE\CRYENGINE Projects\FPSTemplateNEW\FPSTemplateNEW\Code\StdAfx.h" />
-    <ClInclude Include="E:\CRYENGINETRAINEE\CRYENGINE Projects\FPSTemplateNEW\FPSTemplateNEW\Code\Components\Player.cpp">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="E:\CRYENGINETRAINEE\CRYENGINE Projects\FPSTemplateNEW\FPSTemplateNEW\Code\Components\Player.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="Firearm.h">
       <Filter>Components\Combat</Filter>
     </ClInclude>
@@ -49,6 +44,11 @@
     <ClInclude Include="Spawnpoint.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePlugin.h" />
+    <ClInclude Include="StdAfx.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="E:\CRYENGINETRAINEE\CRYENGINE Projects\FPSTemplateNEW\FPSTemplateNEW\Code\CMakeLists.txt" />

@@ -290,25 +290,12 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Damageable.cpp" />
     <ClCompile Include="Firearm.cpp" />
+    <ClCompile Include="GamePlugin.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Spawnpoint.cpp" />
+    <ClCompile Include="StdAfx.cpp" />
     <ClInclude Include="BasicDroneEnemy.h" />
     <ClInclude Include="Bullet.h" />
-    <ClInclude Include="E:\CRYENGINETRAINEE\CRYENGINE Projects\FPSTemplateNEW\FPSTemplateNEW\Code\GamePlugin.cpp" />
-    <ClCompile Include="E:\CRYENGINETRAINEE\CRYENGINE Projects\FPSTemplateNEW\FPSTemplateNEW\Code\StdAfx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">StdAfx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">StdAfx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">StdAfx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
-    </ClCompile>
-    <ClInclude Include="E:\CRYENGINETRAINEE\CRYENGINE Projects\FPSTemplateNEW\FPSTemplateNEW\Code\GamePlugin.h" />
-    <ClInclude Include="E:\CRYENGINETRAINEE\CRYENGINE Projects\FPSTemplateNEW\FPSTemplateNEW\Code\StdAfx.h" />
-    <ClInclude Include="E:\CRYENGINETRAINEE\CRYENGINE Projects\FPSTemplateNEW\FPSTemplateNEW\Code\Components\Player.cpp" />
-    <ClInclude Include="E:\CRYENGINETRAINEE\CRYENGINE Projects\FPSTemplateNEW\FPSTemplateNEW\Code\Components\Player.h" />
     <ClCompile Include="E:\CRYENGINETRAINEE\CRYENGINE Projects\FPSTemplateNEW\FPSTemplateNEW\solutions\win64\Code_uber.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">StdAfx.h</PrecompiledHeaderFile>
@@ -333,7 +320,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </ClCompile>
     <ClInclude Include="Firearm.h" />
     <ClInclude Include="Damageable.h" />
+    <ClInclude Include="GamePlugin.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Spawnpoint.h" />
+    <ClInclude Include="StdAfx.h" />
     <ResourceCompile Include="E:\CRYENGINETRAINEE\CRYENGINE Projects\FPSTemplateNEW\FPSTemplateNEW\solutions\win64\Game.autogen.rc" />
   </ItemGroup>
   <ItemGroup>
