@@ -1,6 +1,5 @@
 #include "StdAfx.h"
 #include "Player.h"
-#include "Firearm.h"
 #include "GamePlugin.h"
 
 #include <CryRenderer/IRenderAuxGeom.h>
