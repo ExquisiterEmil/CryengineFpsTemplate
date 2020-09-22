@@ -73,7 +73,7 @@ void CBulletComponent::ProcessEvent(const SEntityEvent& event) {
 
 void CBulletComponent::TravelStep(float frameTime) 
 {
-	const float velocity = 50.f;
+	const float velocity = 100.f;
 	Vec3 direction = m_pEntity->GetWorldRotation().GetColumn1() * velocity * frameTime;
 	// Check if we are going to hit something
 	CheckCollision(direction);
@@ -86,7 +86,7 @@ void CBulletComponent::CheckCollision(Vec3 direction)
 	//Ray moveRay = Ray(m_pEntity->GetPos(), velocity * frameTime);
 	ray_hit hit;
 	auto pWorld = gEnv->pPhysicalWorld;
-	auto num = pWorld->RayWorldIntersection(m_pEntity->GetPos(), direction, ent_all, rwi_colltype_any | rwi_stop_at_pierceable, &hit, 1);
+	int num = pWorld->RayWorldIntersection(m_pEntity->GetPos(), direction, ent_all, rwi_colltype_any | rwi_stop_at_pierceable, &hit, 1);
 		
 	if (num > 0) {
 		IEntity* hitEntity = gEnv->pEntitySystem->GetEntityFromPhysics(hit.pCollider);

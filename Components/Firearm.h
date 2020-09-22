@@ -3,6 +3,7 @@
 #include <CryEntitySystem/IEntityComponent.h>
 
 #include <DefaultComponents/Geometry/AdvancedAnimationComponent.h>
+#include <CryParticleSystem/IParticles.h>
 
 //////////////////////////////////////////////////
 // Basic functionality for semi-automatic weapons
@@ -69,6 +70,7 @@ protected:
 	int m_magazineCapacity;
 	int m_loadedBulletsCount;
 	int m_ammoId;
+	IParticleEmitter* m_pMuzzleFlash;
 	float damagePerBullet;
 	float inaccuracy;
 	// TriggerComponent (abstraction for different types of shots 

@@ -15,6 +15,17 @@ CRY_STATIC_AUTO_REGISTER_FUNCTION(&RegisterFirearmComponent)
 void CFirearmComponent::Initialize() {
 	m_reloadTimer = 0;
 	m_fireRateTimer = 0;
+	if (!m_pMuzzleFlash) {
+		const char* szParticleEffectPath = "particles/muzzle_flash.pfx";
+		if (IParticleEffect* pEffect = gEnv->pParticleManager->FindEffect(szParticleEffectPath, "ParticleLoadExample"))
+		{
+			// Create a new SpawnParams instance to define how our particles should behave
+			SpawnParams spawnParams;
+			// Create a particle emitter in the next available slot, using the specified spawn parameters
+			//const int slotId = m_pEntity->LoadParticleEmitter(-1, pEffect, &spawnParams);
+			//m_pMuzzleFlash = m_pEntity->GetParticleEmitter(slotId);
+		}
+	}
 }
 
 
@@ -50,8 +61,16 @@ void CFirearmComponent::Shoot() {
 		m_fireRateTimer = 1.0f / m_fireRate;
 		m_loadedBulletsCount--;
 
-		// TODO spawn a bullet, play animation, particles, sound
+		// TODO play animation, sound
 		if (m_pBarrelOut) {
+			if (m_pMuzzleFlash) {
+				// initially I wanted to play the particle effect here, 
+				// but for some reason the emitter would not want to translate.
+				Vec3 localPos = m_pBarrelOut->GetAttWorldAbsolute().t - m_pEntity->GetWorldPos();
+				//m_pMuzzleFlash->SetLocation(QuatT(localPos, IDENTITY));
+				//m_pMuzzleFlash->Restart();
+				//m_pMuzzleFlash->Activate(true);
+			}
 			QuatTS bulletOrigin = m_pBarrelOut->GetAttWorldAbsolute();
 			SEntitySpawnParams spawnParams;
 			spawnParams.pClass = gEnv->pEntitySystem->GetClassRegistry()->FindClass("schematyc::bullet");

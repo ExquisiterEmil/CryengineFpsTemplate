@@ -31,6 +31,7 @@ protected:
 	bool CanSeePlayer();
 	void LookForPlayer();
 	Vec3 GetPlayerPosition();
+	IEntity* RaycastEntityPos(Vec3 target);
 
 	
 	const Vec3 localFireDirection = Vec3(0.2f, 1.f, 0.f);

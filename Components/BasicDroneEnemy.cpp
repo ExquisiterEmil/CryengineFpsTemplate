@@ -53,7 +53,29 @@ bool CBasicDroneEnemyComponent::MoveTowardsPosition(Vec3 pos, float accuracy, fl
 }
 
 bool CBasicDroneEnemyComponent::CanSeePlayer() {
-	return true;
+	IEntity* playerFeet = RaycastEntityPos(m_pPlayer->GetEntity()->GetPos() + Vec3(0, 0, 0.7f));
+	IEntity* playerUpperBody = RaycastEntityPos(m_pPlayer->GetEntity()->GetPos() + Vec3(0, 0, 1.4f));
+
+	if ((playerFeet && playerFeet->GetComponent<CPlayerComponent>()) ||
+	(playerUpperBody && playerUpperBody->GetComponent<CPlayerComponent>())){
+		return true;
+	}
+	return false;
+}
+
+IEntity* CBasicDroneEnemyComponent::RaycastEntityPos(Vec3 target) {
+	// Perform a Raycast to the feet of the player
+	ray_hit hit;
+	IPhysicalWorld* physWorld = gEnv->pPhysicalWorld;
+	Vec3 origin = m_pDroneGun->m_pBarrelOut->GetAttWorldAbsolute().t;
+	Vec3 rayDirection = target - origin;
+	//IPhysicalEntity* ignoreSelf = m_pEntity->GetPhysicalEntity();
+	physWorld->RayWorldIntersection(origin,
+		rayDirection, ent_all, rwi_colltype_any | rwi_stop_at_pierceable, &hit, 1);
+
+	gEnv->pAuxGeomRenderer->DrawLine(origin, { 0,0,0,1 }, origin + rayDirection, { 0,0,0,1 }, 2.f);
+	
+	return gEnv->pEntitySystem->GetEntityFromPhysics(hit.pCollider);
 }
 
 void CBasicDroneEnemyComponent::LookForPlayer() {
@@ -175,9 +197,14 @@ void CBasicDroneEnemyComponent::ProcessEvent(const SEntityEvent& event) {
 			if (m_pPlayer->IsAlive()) {
 				// decide if move towards player or shootAtPlayer -> resolve behaviour tree
 				// for now just shoot him
-				ShootAtPlayer(frameTime); 
+				if (CanSeePlayer()) {
+					ShootAtPlayer(frameTime);
+				}
 				//MoveTowardsPosition(m_pPlayer->GetEntity()->GetPos(), 5.f, frameTime);
 			}
+		}
+		else {
+			ShootAtPlayer(frameTime);
 		}
 		
 	}
