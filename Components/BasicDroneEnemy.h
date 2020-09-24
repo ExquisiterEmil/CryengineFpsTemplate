@@ -21,14 +21,14 @@ public:
 
 	virtual Cry::Entity::EventFlags GetEventMask() const override;
 	virtual void ProcessEvent(const SEntityEvent& event) override;
+	bool MoveTowardsPosition(Vec3 pos, float accuracy, float frameTime);
+	bool CanSeePlayer();
 	CPlayerComponent* m_pPlayer;
+	void ShootAtPlayer(float frameTime);
 
 protected:
-	bool MoveTowardsPosition(Vec3 pos, float accuracy, float frameTime);
-	void ShootAtPlayer(float frameTime);
 	void RotateTowardsPlayer(float frameTime);
 	void FindPlayerEntity();
-	bool CanSeePlayer();
 	void LookForPlayer();
 	Vec3 GetPlayerPosition();
 	IEntity* RaycastEntityPos(Vec3 target);

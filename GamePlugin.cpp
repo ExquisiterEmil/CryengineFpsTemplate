@@ -2,6 +2,7 @@
 #include "GamePlugin.h"
 
 #include "Components/Player.h"
+#include "BehaviorTreeNodes/BasicDroneNodes.cpp"
 
 #include <IGameObjectSystem.h>
 #include <IGameObject.h>
@@ -9,6 +10,8 @@
 #include <CrySchematyc/Env/IEnvRegistry.h>
 #include <CrySchematyc/Env/EnvPackage.h>
 #include <CrySchematyc/Utils/SharedString.h>
+#include <CryAISystem/IAISystem.h>
+#include <CryAiSystem/BehaviorTree/IBehaviorTree.h>
 
 // Included only once per DLL module.
 #include <CryCore/Platform/platform_impl.inl>
@@ -23,12 +26,10 @@ CGamePlugin::~CGamePlugin()
 		gEnv->pSchematyc->GetEnvRegistry().DeregisterPackage(CGamePlugin::GetCID());
 	}
 }
-
 bool CGamePlugin::Initialize(SSystemGlobalEnvironment& env, const SSystemInitParams& initParams)
 {
 	// Register for engine system events, in our case we need ESYSTEM_EVENT_GAME_POST_INIT to load the map
 	gEnv->pSystem->GetISystemEventDispatcher()->RegisterListener(this, "CGamePlugin");
-
 	return true;
 }
 
@@ -39,6 +40,7 @@ void CGamePlugin::OnSystemEvent(ESystemEvent event, UINT_PTR wparam, UINT_PTR lp
 		// Called when the game framework has initialized and we are ready for game logic to start
 		case ESYSTEM_EVENT_GAME_POST_INIT:
 		{
+			BehaviorTree::ShootPlayer::RegisterBehaviorTreeNodes_Custom();
 			// Don't need to load the map in editor
 			if (!gEnv->IsEditor())
 			{

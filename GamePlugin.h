@@ -42,4 +42,5 @@ protected:
 	EntityId m_player;
 	CPlayerComponent* m_pPlayer;
 	bool m_playerInited = false;
+
 };

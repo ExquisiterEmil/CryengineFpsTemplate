@@ -91,6 +91,9 @@ protected:
 	CSpawnpointComponent* m_pSpawn;
 	FragmentID m_idleAnimationFragment;
 	FragmentID m_activeAnimationFragment;
+	FragmentID m_desiredAnimationFragment;
+	FragmentID m_shootAnimationFragment;
+	FragmentID m_reloadAnimationFragment;
 	CFirearmComponent* m_pEquippedWeapon = nullptr;
 	CDamageable* m_pDamageableComponent;
 

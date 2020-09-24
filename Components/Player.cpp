@@ -50,9 +50,6 @@ void CPlayerComponent::ProcessEvent(const SEntityEvent& event)
 	break;
 	case Cry::Entity::EEvent::GameplayStarted: 
 	{
-		if (!m_pSpawn) {
-			FindSpawnPoint();
-		}
 		Respawn();
 	}
 	break;
@@ -171,7 +168,7 @@ void CPlayerComponent::UpdateCamera(float frameTime) {
 }
 
 void CPlayerComponent::UpdateAnimation(float frameTime) {
-	if (m_activeAnimationFragment != m_idleAnimationFragment)
+	if (m_activeAnimationFragment != m_desiredAnimationFragment)
 	{
 		m_activeAnimationFragment = m_idleAnimationFragment;
 		m_pAnimationComponent->QueueFragmentWithId(m_activeAnimationFragment);
@@ -234,7 +231,10 @@ void CPlayerComponent::InitializeCharacterController() {
 	// Queue the idle fragment to start playing immediately on next update
 	m_pAnimationComponent->SetDefaultFragmentName("Idle");
 	m_idleAnimationFragment = m_pAnimationComponent->GetFragmentId("Idle");
+	m_shootAnimationFragment = m_pAnimationComponent->GetFragmentId("Reload");
+	m_reloadAnimationFragment = m_pAnimationComponent->GetFragmentId("Shoot");
 	m_activeAnimationFragment = FRAGMENT_ID_INVALID;
+	m_desiredAnimationFragment = m_idleAnimationFragment;
 
 	if (ICharacterInstance* characterInstance = m_pAnimationComponent->GetCharacter()) {
 		m_cameraJointId = characterInstance->GetIDefaultSkeleton().GetJointIDByName("mixamorig:Head");

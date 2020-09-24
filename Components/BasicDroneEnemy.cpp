@@ -3,6 +3,8 @@
 #include <CryPhysics/IPhysics.h>
 #include <CryEntitySystem/IEntitySystem.h>
 #include <CryRenderer/IRenderAuxGeom.h>
+#include <CryAiSystem/BehaviorTree/IBehaviorTree.h>
+#include <CryAISystem/Components/IEntityBehaviorTreeComponent.h>
 #include <math.h>
 
 static void RegisterBasicDroneEnemyComponent(Schematyc::IEnvRegistrar& registrar) {
@@ -13,6 +15,7 @@ static void RegisterBasicDroneEnemyComponent(Schematyc::IEnvRegistrar& registrar
 }
 
 CRY_STATIC_AUTO_REGISTER_FUNCTION(&RegisterBasicDroneEnemyComponent)
+
 
 void CBasicDroneEnemyComponent::Initialize() {
 	m_pDamageableComponent = m_pEntity->GetOrCreateComponent<CDamageable>();
@@ -42,23 +45,27 @@ void CBasicDroneEnemyComponent::Initialize() {
 bool CBasicDroneEnemyComponent::MoveTowardsPosition(Vec3 pos, float accuracy, float frameTime) {
 	Vec3 vecToPosition = pos - m_pEntity->GetWorldPos();
 	float distance = vecToPosition.GetLength();
-
+	bool reached = true;
 	if (distance > accuracy) {
 		// INSERT complex pathfinding algorithm here.
 		Vec3 movementStep = vecToPosition.Normalize() * m_movementSpeed * frameTime;
 		m_pEntity->SetPos(m_pEntity->GetPos() + movementStep);
-		return false;
+		reached = false;
 	}
-	return true;
+	// Always look towards the player, no matter the destination.
+	RotateTowardsPlayer(frameTime);
+	return reached;
 }
 
 bool CBasicDroneEnemyComponent::CanSeePlayer() {
-	IEntity* playerFeet = RaycastEntityPos(m_pPlayer->GetEntity()->GetPos() + Vec3(0, 0, 0.7f));
-	IEntity* playerUpperBody = RaycastEntityPos(m_pPlayer->GetEntity()->GetPos() + Vec3(0, 0, 1.4f));
+	if (m_pPlayer->IsAlive()) {
+		IEntity* playerFeet = RaycastEntityPos(m_pPlayer->GetEntity()->GetPos() + Vec3(0, 0, 0.7f));
+		IEntity* playerUpperBody = RaycastEntityPos(m_pPlayer->GetEntity()->GetPos() + Vec3(0, 0, 1.4f));
 
-	if ((playerFeet && playerFeet->GetComponent<CPlayerComponent>()) ||
-	(playerUpperBody && playerUpperBody->GetComponent<CPlayerComponent>())){
-		return true;
+		if ((playerFeet && playerFeet->GetComponent<CPlayerComponent>()) ||
+		(playerUpperBody && playerUpperBody->GetComponent<CPlayerComponent>())){
+			return true;
+		}
 	}
 	return false;
 }
@@ -197,10 +204,9 @@ void CBasicDroneEnemyComponent::ProcessEvent(const SEntityEvent& event) {
 			if (m_pPlayer->IsAlive()) {
 				// decide if move towards player or shootAtPlayer -> resolve behaviour tree
 				// for now just shoot him
-				if (CanSeePlayer()) {
-					ShootAtPlayer(frameTime);
-				}
-				//MoveTowardsPosition(m_pPlayer->GetEntity()->GetPos(), 5.f, frameTime);
+
+				// UPDATE BLACKBOARD
+
 			}
 		}
 		else {
