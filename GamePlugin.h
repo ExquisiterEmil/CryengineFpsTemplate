@@ -9,6 +9,10 @@ class CPlayerComponent;
 // The entry-point of the application
 // An instance of CGamePlugin is automatically created when the library is loaded
 // We then construct the local player entity and CPlayerComponent instance when OnClientConnectionReceived is first called.
+
+// Created by Emil Dobetsberger September 2020
+// Known issues: on game run not the correct level is being loaded (should be "example"),
+//		Enemy behavior tree is not loaded until the level is loaded twice, or until it is re-assigned in the schematyc editor tool
 class CGamePlugin 
 	: public Cry::IEnginePlugin
 	, public ISystemEventListener

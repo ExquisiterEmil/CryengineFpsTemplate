@@ -82,18 +82,26 @@ protected:
 	Cry::DefaultComponents::CInputComponent* m_pInputComponent = nullptr;
 	Cry::DefaultComponents::CCharacterControllerComponent* m_pCharacterController = nullptr;
 	Cry::DefaultComponents::CAdvancedAnimationComponent* m_pAnimationComponent = nullptr;
-	Cry::Audio::DefaultComponents::CListenerComponent* m_pAudioListenerComponent = nullptr;
+	Cry::Audio::DefaultComponents::CListenerComponent* m_pAudioListenerComponent = nullptr; 
+	IActionController* m_pActionController = nullptr;
+
 
 	CEnumFlags<EInputFlag> m_inputFlags;
 	Vec2 m_mouseDeltaRotation;
 	int m_cameraJointId = -1;
 
 	CSpawnpointComponent* m_pSpawn;
-	FragmentID m_idleAnimationFragment;
+
 	FragmentID m_activeAnimationFragment;
 	FragmentID m_desiredAnimationFragment;
+	FragmentID m_idleAnimationFragmentId;
 	FragmentID m_shootAnimationFragment;
 	FragmentID m_reloadAnimationFragment;
+
+	IActionPtr m_idleAction;
+	IActionPtr m_activeAction;
+
+
 	CFirearmComponent* m_pEquippedWeapon = nullptr;
 	CDamageable* m_pDamageableComponent;
 

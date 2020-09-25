@@ -6,6 +6,7 @@
 #include <CrySchematyc/Env/Elements/EnvComponent.h>
 #include <CryCore/StaticInstanceList.h>
 #include <CryNetwork/Rmi.h>
+#include <ICryMannequin.h>
 
 #define MOUSE_DELTA_TRESHOLD 0.0001f
 
@@ -170,10 +171,18 @@ void CPlayerComponent::UpdateCamera(float frameTime) {
 void CPlayerComponent::UpdateAnimation(float frameTime) {
 	if (m_activeAnimationFragment != m_desiredAnimationFragment)
 	{
-		m_activeAnimationFragment = m_idleAnimationFragment;
-		m_pAnimationComponent->QueueFragmentWithId(m_activeAnimationFragment);
+		// Set the desired Action with a priority
+		m_activeAnimationFragment = m_desiredAnimationFragment;
+		m_activeAction = new TAction<SAnimationContext>(30U, m_activeAnimationFragment);
+		m_pAnimationComponent->QueueCustomFragment(*m_activeAction);
 	}
-
+	// Instantiate and queue idle action
+	// Marked as interruptable, will re-install itself when no action of a higher priority is playing
+	if (!m_idleAction)
+	{
+		m_idleAction = new TAction<SAnimationContext>(0U, m_idleAnimationFragmentId, TAG_STATE_EMPTY, IAction::Interruptable);
+		m_pAnimationComponent->QueueCustomFragment(*m_idleAction);
+	}
 }
 #pragma endregion
 
@@ -230,11 +239,11 @@ void CPlayerComponent::InitializeCharacterController() {
 
 	// Queue the idle fragment to start playing immediately on next update
 	m_pAnimationComponent->SetDefaultFragmentName("Idle");
-	m_idleAnimationFragment = m_pAnimationComponent->GetFragmentId("Idle");
-	m_shootAnimationFragment = m_pAnimationComponent->GetFragmentId("Reload");
-	m_reloadAnimationFragment = m_pAnimationComponent->GetFragmentId("Shoot");
+	m_idleAnimationFragmentId = m_pAnimationComponent->GetFragmentId("Idle"); 
+	m_shootAnimationFragment = m_pAnimationComponent->GetFragmentId("Shoot");
+	m_reloadAnimationFragment = m_pAnimationComponent->GetFragmentId("Reload");
 	m_activeAnimationFragment = FRAGMENT_ID_INVALID;
-	m_desiredAnimationFragment = m_idleAnimationFragment;
+	m_desiredAnimationFragment = FRAGMENT_ID_INVALID;
 
 	if (ICharacterInstance* characterInstance = m_pAnimationComponent->GetCharacter()) {
 		m_cameraJointId = characterInstance->GetIDefaultSkeleton().GetJointIDByName("mixamorig:Head");
@@ -243,6 +252,7 @@ void CPlayerComponent::InitializeCharacterController() {
 	// Apply the character to the entity and queue animations
 	m_pAnimationComponent->ResetCharacter();
 	m_pCharacterController->Physicalize();
+	m_pActionController = m_pAnimationComponent->GetActionController();
 }
 
 void CPlayerComponent::EquipDefaultWeapon() {
@@ -291,7 +301,19 @@ void CPlayerComponent::RegisterInputs() {
 		m_pInputComponent->RegisterAction("player", "shoot", [this](int activationMode, float value) {
 			if (activationMode == eAAM_OnPress) {
 				if (m_pEquippedWeapon != nullptr) {
-					m_pEquippedWeapon->Shoot();
+					if (m_pEquippedWeapon->Shoot())
+					{
+						m_desiredAnimationFragment = m_shootAnimationFragment;
+						if (m_activeAction) {
+							// interrupt current action
+							m_activeAction->ForceFinish();
+						}
+						if (m_activeAnimationFragment == m_shootAnimationFragment) {
+							// in case the animation was the last one activated
+							// in order to be triggered again, we set the active to invalid
+							m_activeAnimationFragment = FRAGMENT_ID_INVALID;
+						}
+					}
 				}
 				else {
 					CryLog("no weapon equipped");
@@ -303,8 +325,17 @@ void CPlayerComponent::RegisterInputs() {
 		m_pInputComponent->RegisterAction("player", "reload", [this](int activationMode, float value) {
 			if (activationMode == eAAM_OnPress) {
 				if (m_pEquippedWeapon != nullptr) {
-					//TODO: if correct ammo type available - subtract from carried ammo, if ammo missing
 					m_pEquippedWeapon->StartReload();
+					m_desiredAnimationFragment = m_reloadAnimationFragment; 
+					if (m_activeAction) {
+						// interrupt current action
+						m_activeAction->ForceFinish();
+					}
+					if (m_activeAnimationFragment == m_reloadAnimationFragment) {
+						// in case the animation was the last one activated
+						// in order to be triggered again, we set the active to invalid
+						m_activeAnimationFragment = FRAGMENT_ID_INVALID;
+					}
 				}
 			}
 		});

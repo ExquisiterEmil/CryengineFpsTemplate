@@ -56,7 +56,7 @@ void CFirearmComponent::ProcessEvent(const SEntityEvent& event) {
 }
 
 // pull the trigger
-void CFirearmComponent::Shoot() {
+bool CFirearmComponent::Shoot() {
 	if (m_fireRateTimer <= 0 && m_loadedBulletsCount > 0) {
 		m_fireRateTimer = 1.0f / m_fireRate;
 		m_loadedBulletsCount--;
@@ -94,10 +94,12 @@ void CFirearmComponent::Shoot() {
 		else {
 			CryLog("ERR: no barrel_out attachent set");
 		}
+		return true;
 	}
 	else if (m_loadedBulletsCount == 0) {
 		CryLog("Need to reload");
 	}
+	return false;
 }
 
 // iniciate the reloading process

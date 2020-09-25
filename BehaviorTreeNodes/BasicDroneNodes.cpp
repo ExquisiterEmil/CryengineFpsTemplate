@@ -19,7 +19,6 @@ public:
 
 	virtual void OnInitialize(const BehaviorTree::UpdateContext& context) override {
 		GetRuntimeData<RuntimeData>(context).drone = context.entity.GetComponent<CBasicDroneEnemyComponent>();
-		CryLog("MoveToPositionNode started");
 	}
 
 	virtual BehaviorTree::Status Update(const BehaviorTree::UpdateContext& context) override {
@@ -52,7 +51,6 @@ public:
 
 	virtual void OnInitialize(const BehaviorTree::UpdateContext& context) override {
 		GetRuntimeData<RuntimeData>(context).drone = context.entity.GetComponent<CBasicDroneEnemyComponent>(); 
-		CryLog("ShootPlayer started");
 	}
 
 	virtual BehaviorTree::Status Update(const BehaviorTree::UpdateContext& context) override {

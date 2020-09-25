@@ -45,7 +45,7 @@ public:
 	virtual void ProcessEvent(const SEntityEvent& event) override;
 	float StartReload();
 	void CancelReload();
-	void Shoot();
+	bool Shoot();
 	bool IsLoaded() { return m_loadedBulletsCount > 0; }
 	void InfiniteBullets() {
 		// not actually infinite but more than is going to be needed.

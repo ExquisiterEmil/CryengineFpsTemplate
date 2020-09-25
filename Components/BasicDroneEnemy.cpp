@@ -58,7 +58,7 @@ bool CBasicDroneEnemyComponent::MoveTowardsPosition(Vec3 pos, float accuracy, fl
 }
 
 bool CBasicDroneEnemyComponent::CanSeePlayer() {
-	if (m_pPlayer->IsAlive()) {
+	if (m_pPlayer && m_pPlayer->IsAlive()) {
 		IEntity* playerFeet = RaycastEntityPos(m_pPlayer->GetEntity()->GetPos() + Vec3(0, 0, 0.7f));
 		IEntity* playerUpperBody = RaycastEntityPos(m_pPlayer->GetEntity()->GetPos() + Vec3(0, 0, 1.4f));
 
@@ -80,7 +80,8 @@ IEntity* CBasicDroneEnemyComponent::RaycastEntityPos(Vec3 target) {
 	physWorld->RayWorldIntersection(origin,
 		rayDirection, ent_all, rwi_colltype_any | rwi_stop_at_pierceable, &hit, 1);
 
-	gEnv->pAuxGeomRenderer->DrawLine(origin, { 0,0,0,1 }, origin + rayDirection, { 0,0,0,1 }, 2.f);
+	// Make Raycasts visible with this line of code:
+	//gEnv->pAuxGeomRenderer->DrawLine(origin, { 0,0,0,1 }, origin + rayDirection, { 0,0,0,1 }, 2.f);
 	
 	return gEnv->pEntitySystem->GetEntityFromPhysics(hit.pCollider);
 }
